@@ -1,29 +1,23 @@
-#include "box.cpp"
+#include "box.h"
+#include "container.h"
 #include <algorithm>
 #include <iostream>
 #include <stdio.h>
 #include <vector>
 #include <stdexcept>
 
-class WeightLimitExceeded : public std::exception
+namespace Storages
 {
-public:
-  const char *what() const noexcept override
+  class WeightLimitExceeded : public std::exception
   {
-    return "Превышен максимальный вес контейнера!";
-  }
-};
+  public:
+    const char *what() const noexcept override
+    {
+      return "Превышен максимальный вес контейнера!";
+    }
+  };
 
-class Container
-{
-public:
-  int length;
-  int width;
-  int height;
-  double maxWeight;
-  std::vector<Box> boxes;
-
-  Container(int length, int width, int height, double weight)
+  Container::Container(int length, int width, int height, double weight)
   {
     this->length = length;
     this->width = width;
@@ -31,9 +25,9 @@ public:
     this->maxWeight = weight;
   };
 
-  int getBoxesCount() { return boxes.size(); }
+  int Container::getBoxesCount() { return boxes.size(); }
 
-  double getWeight()
+  double Container::getWeight()
   {
     double result = 0.0;
     for (Box box : boxes)
@@ -43,7 +37,7 @@ public:
     return result;
   }
 
-  int getTotalValue()
+  int Container::getTotalValue()
   {
     int total = 0;
     for (const Box &box : boxes)
@@ -53,7 +47,7 @@ public:
     return total;
   }
 
-  Box getAtIndex(int index)
+  Box Container::getAtIndex(int index)
   {
     if (isValidIndex(index))
     {
@@ -61,7 +55,7 @@ public:
     }
   }
 
-  int addBox(const Box &box)
+  int Container::addBox(const Box &box)
   {
     if (getWeight() + box.weight > maxWeight)
     {
@@ -71,7 +65,7 @@ public:
     return boxes.size() - 1;
   }
 
-  int addBoxAtIndex(const Box &box, int index)
+  int Container::addBoxAtIndex(const Box &box, int index)
   {
     if (isValidIndex(index))
     {
@@ -84,7 +78,7 @@ public:
     }
   }
 
-  void deleteAtIndex(int index)
+  void Container::deleteAtIndex(int index)
   {
     if (!isValidIndex(index))
     {
@@ -93,7 +87,7 @@ public:
     boxes.erase(boxes.begin() + index);
   }
 
-  friend std::ostream &operator<<(std::ostream &os, const Container &container)
+  std::ostream &Storages::operator<<(std::ostream &os, const Container &container)
   {
     os << "Container(" << container.length << " " << container.width << " " << container.height
        << ", maxWeight: " << container.maxWeight << ", boxes: [";
@@ -107,7 +101,7 @@ public:
     return os;
   }
 
-  friend std::istream &operator>>(std::istream &is, Container &container)
+  std::istream &Storages::operator>>(std::istream &is, Container &container)
   {
     is >> container.length >> container.width >> container.height >> container.maxWeight;
     int boxCount;
@@ -122,7 +116,7 @@ public:
     return is;
   }
 
-  const Box &operator[](int index) const
+  const Box &Container::operator[](int index) const
   {
     if (index < 0 || static_cast<std::vector<int>::size_type>(index) >= boxes.size())
     {
@@ -131,7 +125,7 @@ public:
     return boxes[index];
   }
 
-  bool isValidIndex(int index)
+  bool Container::isValidIndex(int index)
   {
     if (index < 0 || static_cast<std::vector<int>::size_type>(index) >= boxes.size())
     {
@@ -142,4 +136,4 @@ public:
       return true;
     }
   }
-};
+}
