@@ -8,14 +8,10 @@
 
 namespace Storages
 {
-  class WeightLimitExceeded : public std::exception
+  const char *WeightLimitExceeded::what() const noexcept
   {
-  public:
-    const char *what() const noexcept override
-    {
-      return "Превышен максимальный вес контейнера!";
-    }
-  };
+    return "Превышен максимальный вес контейнера!";
+  }
 
   Container::Container(int length, int width, int height, double weight)
   {
@@ -49,10 +45,8 @@ namespace Storages
 
   Box Container::getAtIndex(int index)
   {
-    if (isValidIndex(index))
-    {
-      return boxes[index];
-    }
+    isValidIndex(index);
+    return boxes[index];
   }
 
   int Container::addBox(const Box &box)
@@ -67,27 +61,22 @@ namespace Storages
 
   int Container::addBoxAtIndex(const Box &box, int index)
   {
-    if (isValidIndex(index))
+    isValidIndex(index);
+    if (getWeight() + box.weight > maxWeight)
     {
-      if (getWeight() + box.weight > maxWeight)
-      {
-        throw WeightLimitExceeded();
-      }
-      boxes.insert(boxes.begin() + index, box);
-      return index;
+      throw WeightLimitExceeded();
     }
+    boxes.insert(boxes.begin() + index, box);
+    return index;
   }
 
   void Container::deleteAtIndex(int index)
   {
-    if (!isValidIndex(index))
-    {
-      return;
-    }
+    isValidIndex(index);
     boxes.erase(boxes.begin() + index);
   }
 
-  std::ostream &Storages::operator<<(std::ostream &os, const Container &container)
+  std::ostream &operator<<(std::ostream &os, const Container &container)
   {
     os << "Container(" << container.length << " " << container.width << " " << container.height
        << ", maxWeight: " << container.maxWeight << ", boxes: [";
@@ -101,7 +90,7 @@ namespace Storages
     return os;
   }
 
-  std::istream &Storages::operator>>(std::istream &is, Container &container)
+  std::istream &operator>>(std::istream &is, Container &container)
   {
     is >> container.length >> container.width >> container.height >> container.maxWeight;
     int boxCount;

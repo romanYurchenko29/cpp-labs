@@ -41,20 +41,20 @@ namespace Storages
 
   int Box::volume() const { return length * width * height; }
 
-  std::ostream &Storages::operator<<(std::ostream &os, const Box &box)
+  std::ostream &operator<<(std::ostream &os, const Box &box)
   {
     os << "Box(" << box.length << " " << box.width << " " << box.height << " "
        << box.value << " " << box.weight << ")";
     return os;
   }
 
-  std::istream &Storages::operator>>(std::istream &is, Box &box)
+  std::istream &operator>>(std::istream &is, Box &box)
   {
     is >> box.length >> box.width >> box.height >> box.value >> box.weight;
     return is;
   }
 
-  int Storages::boxArraySum(Box *boxArr, int size)
+  int boxArraySum(Box *boxArr, int size)
   {
     double sum = 0.0;
     for (int i = 0; i < size; i++)
@@ -64,7 +64,7 @@ namespace Storages
     return sum;
   }
 
-  bool Storages::checkBoxParameters(Box *boxArr, int size, int maxSumV)
+  bool checkBoxParameters(Box *boxArr, int size, int maxSumV)
   {
     for (int i = 0; i < size; i++)
     {
@@ -76,7 +76,7 @@ namespace Storages
     return true;
   }
 
-  double Storages::maxWeight(Box *boxArr, int size, int maxV)
+  double maxWeight(Box *boxArr, int size, int maxV)
   {
     double maxWeight = 0.0;
     for (int i = 0; i < size; i++)
@@ -89,7 +89,7 @@ namespace Storages
     return maxWeight;
   }
 
-  bool Storages::canNestAllBoxes(Box *boxArr, int size)
+  bool canNestAllBoxes(Box *boxArr, int size)
   {
     std::vector<Box> boxes(boxArr, boxArr + size);
 

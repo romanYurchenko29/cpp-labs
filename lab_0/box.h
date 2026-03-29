@@ -40,4 +40,4 @@ namespace Storages
     bool canNestAllBoxes(Box *boxArr, int size);
 }
 
-#endif BOX_H
+#endif //BOX_H

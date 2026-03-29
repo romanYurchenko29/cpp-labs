@@ -41,14 +41,7 @@ namespace Storages
 
         friend std::istream &operator>>(std::istream &is, Container &container);
 
-        const Box &operator[](int index) const
-        {
-            if (index < 0 || static_cast<std::vector<int>::size_type>(index) >= boxes.size())
-            {
-                throw std::out_of_range("Индекс за пределами диапазона");
-            }
-            return boxes[index];
-        }
+        const Box &operator[](int index) const;
 
         bool isValidIndex(int index);
     };
@@ -58,4 +51,4 @@ namespace Storages
     std::istream &operator>>(std::istream &is, Container &container);
 }
 
-#endif CONTAINER_H
+#endif //CONTAINER_H
